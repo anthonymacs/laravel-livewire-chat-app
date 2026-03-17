@@ -11,12 +11,10 @@
 
         {{-- Cover Banner --}}
         <div class="h-48 w-full relative" style="background: linear-gradient(135deg, #3730a3 0%, #4f46e5 50%, #7c3aed 100%);">
-            {{-- Decorative circles --}}
             <div class="absolute top-4 right-4 w-32 h-32 bg-white/10 rounded-full"></div>
             <div class="absolute top-12 right-20 w-16 h-16 bg-white/10 rounded-full"></div>
             <div class="absolute -bottom-6 left-1/2 w-24 h-24 bg-white/5 rounded-full"></div>
 
-            {{-- Edit Cover Button --}}
             <button class="absolute top-4 right-4 flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold px-3 py-1.5 rounded-xl backdrop-blur-sm transition">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
@@ -33,7 +31,7 @@
                 {{-- Avatar --}}
                 <div class="flex items-end gap-5">
                     <div class="relative shrink-0">
-                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=4f46e5&color=fff&size=200"
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=4f46e5&color=fff&size=200"
                              class="w-24 h-24 rounded-2xl border-4 border-white shadow-lg" alt="Avatar">
                         <button class="absolute -bottom-2 -right-2 w-7 h-7 bg-indigo-600 rounded-xl flex items-center justify-center border-2 border-white hover:bg-indigo-700 transition shadow-md">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,20 +41,31 @@
                     </div>
                     <div class="mb-1">
                         <div class="flex items-center gap-2">
-                            <h2 class="text-xl font-extrabold text-gray-900">John Doe</h2>
-                            <span class="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 px-2.5 py-1 rounded-full border border-green-100">
-                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                Online
-                            </span>
+                            <h2 class="text-xl font-extrabold text-gray-900">{{ auth()->user()->name }}</h2>
+
+                            {{-- Role Badge --}}
+                            @if(auth()->user()->isSuperAdmin())
+                                <span class="flex items-center gap-1 text-xs font-semibold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">
+                                    <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-pulse"></span>
+                                    Superadmin
+                                </span>
+                            @else
+                                <span class="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 px-2.5 py-1 rounded-full border border-green-100">
+                                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                                    Online
+                                </span>
+                            @endif
                         </div>
-                        <p class="text-sm text-gray-400 mt-0.5">john@example.com</p>
-                        <p class="text-xs text-gray-400 mt-1 flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            San Francisco, CA
-                        </p>
+                        <p class="text-sm text-gray-400 mt-0.5">{{ auth()->user()->email }}</p>
+                        @if(auth()->user()->location)
+                            <p class="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                {{ auth()->user()->location }}
+                            </p>
+                        @endif
                     </div>
                 </div>
 
@@ -68,8 +77,6 @@
                         </svg>
                         Share
                     </button>
-
-                    {{-- Edit Profile → navigates to update page --}}
                     <a href="{{ route('profile.update') }}"
                        class="flex items-center gap-2 text-xs font-semibold text-white px-4 py-2.5 rounded-xl transition shadow-md hover:shadow-lg hover:opacity-90"
                        style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
@@ -105,8 +112,6 @@
 
     {{-- Main Content Grid --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        {{-- Left Column --}}
         <div class="lg:col-span-2 space-y-6">
 
             {{-- Personal Information --}}
@@ -114,10 +119,8 @@
                 <div class="flex items-center justify-between mb-6">
                     <div>
                         <h3 class="text-base font-bold text-gray-900">Personal Information</h3>
-                        <p class="text-xs text-gray-400 mt-0.5">Update your personal details</p>
+                        <p class="text-xs text-gray-400 mt-0.5">Your personal details</p>
                     </div>
-
-                    {{-- Edit → navigates to update page --}}
                     <a href="{{ route('profile.update') }}"
                        class="flex items-center gap-1.5 text-xs text-indigo-600 font-semibold bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -131,62 +134,82 @@
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-2">Full Name</label>
-                        <div class="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl px-4 py-3.5 transition cursor-default">
+                        <div class="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-indigo-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
-                            <span class="text-sm text-gray-700 font-medium">John Doe</span>
+                            <span class="text-sm text-gray-700 font-medium">{{ auth()->user()->name }}</span>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-2">Username</label>
-                        <div class="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl px-4 py-3.5 transition cursor-default">
+                        <div class="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-indigo-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
-                            <span class="text-sm text-gray-700 font-medium">@johndoe</span>
+                            <span class="text-sm text-gray-700 font-medium">
+                                {{ auth()->user()->username ? '@'.auth()->user()->username : '—' }}
+                            </span>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-2">Email Address</label>
-                        <div class="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl px-4 py-3.5 transition cursor-default">
+                        <div class="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-indigo-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
-                            <span class="text-sm text-gray-700 font-medium">john@example.com</span>
+                            <span class="text-sm text-gray-700 font-medium">{{ auth()->user()->email }}</span>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-2">Phone Number</label>
-                        <div class="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl px-4 py-3.5 transition cursor-default">
+                        <div class="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-indigo-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                             </svg>
-                            <span class="text-sm text-gray-700 font-medium">+1 (555) 000-0000</span>
+                            <span class="text-sm text-gray-700 font-medium">
+                                {{ auth()->user()->phone ?? '—' }}
+                            </span>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-2">Location</label>
-                        <div class="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl px-4 py-3.5 transition cursor-default">
+                        <div class="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-indigo-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
-                            <span class="text-sm text-gray-700 font-medium">San Francisco, CA</span>
+                            <span class="text-sm text-gray-700 font-medium">
+                                {{ auth()->user()->location ?? '—' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 mb-2">Role</label>
+                        <div class="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-indigo-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                            <span class="text-sm text-gray-700 font-medium capitalize">
+                                {{ auth()->user()->role }}
+                            </span>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-2">Member Since</label>
-                        <div class="flex items-center gap-3 bg-gray-50 hover:bg-gray-100 rounded-xl px-4 py-3.5 transition cursor-default">
+                        <div class="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-indigo-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <span class="text-sm text-gray-700 font-medium">January 2024</span>
+                            <span class="text-sm text-gray-700 font-medium">
+                                {{ auth()->user()->created_at->format('F Y') }}
+                            </span>
                         </div>
                     </div>
 
@@ -195,8 +218,10 @@
                 {{-- Bio --}}
                 <div class="mt-4">
                     <label class="block text-xs font-semibold text-gray-500 mb-2">Bio</label>
-                    <div class="bg-gray-50 hover:bg-gray-100 rounded-xl px-4 py-3.5 transition cursor-default">
-                        <p class="text-sm text-gray-700 leading-relaxed">Hey there! I'm John, a software developer who loves building products and connecting with people. Always up for a good conversation! 👋</p>
+                    <div class="bg-gray-50 rounded-xl px-4 py-3.5">
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            {{ auth()->user()->bio ?? 'No bio yet. Click Edit to add one.' }}
+                        </p>
                     </div>
                 </div>
             </div>

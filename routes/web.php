@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +11,7 @@ Route::get('/', function () {
     return view('livewire.home.homepage');
 })->name('home');
 
+// ===== GUEST ROUTES =====
 Route::get('/login', function () {
     return view('livewire.auth.login');
 })->middleware('guest')->name('login');
@@ -24,6 +24,12 @@ Route::post('/login', function (Request $request) {
 
     if (Auth::attempt($credentials, $request->boolean('remember'))) {
         $request->session()->regenerate();
+
+        // Redirect based on role
+        if (Auth::user()->isSuperAdmin()) {
+            return redirect()->intended('/admin/dashboard');
+        }
+
         return redirect()->intended('/dashboard');
     }
 
@@ -48,6 +54,7 @@ Route::post('/register', function (Request $request) {
         'name'     => $request->name,
         'email'    => $request->email,
         'password' => Hash::make($request->password),
+        'role'     => 'user',
     ]);
 
     Auth::login($user);
@@ -55,7 +62,7 @@ Route::post('/register', function (Request $request) {
     return redirect('/dashboard');
 })->middleware('guest');
 
-// Logout
+// ===== LOGOUT =====
 Route::post('/logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
@@ -63,34 +70,82 @@ Route::post('/logout', function (Request $request) {
     return redirect('/');
 })->name('logout');
 
-// ===== STATIC - NO AUTH REQUIRED =====
-Route::get('/dashboard', function () {
-    return view('livewire.dashboard.index');
-})->name('dashboard');
+// ===== AUTH REQUIRED ROUTES =====
+Route::middleware(['auth'])->group(function () {
 
-Route::get('/messages', function () {
-    return view('livewire.messages.index');
-})->name('messages');
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('livewire.dashboard.index');
+    })->name('dashboard');
 
-Route::get('/contacts', function () {
-    return view('livewire.contacts.index');
-})->name('contacts');
+    // Messages
+    Route::get('/messages', function () {
+        return view('livewire.messages.index');
+    })->name('messages');
 
-Route::get('/notifications', function () {
-    return view('livewire.notifications.index');
-})->name('notifications');
+    // Contacts
+    Route::get('/contacts', function () {
+        return view('livewire.contacts.index');
+    })->name('contacts');
 
-Route::get('/settings', function () {
-    return view('livewire.settings.index');
-})->name('settings');
+    // Notifications
+    Route::get('/notifications', function () {
+        return view('livewire.notifications.index');
+    })->name('notifications');
 
-Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Settings
+    Route::get('/settings', function () {
+        return view('livewire.settings.index');
+    })->name('settings');
 
-Route::get('/profile', function () {
-    return view('livewire.profile.index');
-})->name('profile.edit');
-Route::get('/profile/update', function () {
-    return view('livewire.profile.update');
-})->name('profile.update');
+    // ===== PROFILE ROUTES =====
+    Route::get('/profile', function () {
+        return view('livewire.profile.index');
+    })->name('profile.index');
+
+    Route::get('/profile/update', function () {
+        return view('livewire.profile.update');
+    })->name('profile.update');
+
+    Route::patch('/profile/update', function (Request $request) {
+        $request->validate([
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'email', 'unique:users,email,' . Auth::id()],
+            'username' => ['nullable', 'string', 'max:50'],
+            'phone'    => ['nullable', 'string', 'max:20'],
+            'location' => ['nullable', 'string', 'max:100'],
+            'bio'      => ['nullable', 'string', 'max:160'],
+        ]);
+
+        Auth::user()->update(
+            $request->only('name', 'email', 'username', 'phone', 'location', 'bio')
+        );
+
+        return back()->with('success', 'Profile updated successfully!');
+    })->name('profile.save');
+
+    Route::patch('/profile/password', function (Request $request) {
+        $request->validate([
+            'current_password' => ['required'],
+            'new_password'     => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        if (!Hash::check($request->current_password, Auth::user()->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
+
+        Auth::user()->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        return back()->with('success', 'Password updated successfully!');
+    })->name('profile.password');
+
+});
+
+// ===== SUPERADMIN ROUTES =====
+Route::middleware(['auth', 'superadmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('livewire.admin.dashboard');
+    })->name('dashboard');
+});
