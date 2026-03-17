@@ -6,83 +6,51 @@
     <title>ChatApp — Create Account</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50 font-sans antialiased min-h-screen flex">
+<body class="bg-gradient-to-br from-indigo-50 via-white to-purple-50 font-sans antialiased min-h-screen flex items-center justify-center p-4">
 
-    {{-- Left Panel --}}
-    <div class="hidden lg:flex w-1/2 bg-gradient-to-br from-indigo-600 to-purple-600 flex-col justify-between p-12 text-white">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                </svg>
-            </div>
-            <span class="text-xl font-bold">ChatApp</span>
-        </div>
+    {{-- Background Blobs --}}
+    <div class="absolute top-0 left-0 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+    <div class="absolute bottom-0 right-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
 
-        <div>
-            <h2 class="text-4xl font-extrabold leading-tight">Start connecting <br> with everyone.</h2>
-            <p class="mt-4 text-indigo-100 text-sm leading-relaxed max-w-sm">
-                Join thousands of users who chat faster, share files, and stay in sync — all in one place.
-            </p>
+    {{-- Card --}}
+    <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
 
-            {{-- Mock Chat Bubbles --}}
-            <div class="mt-10 space-y-4">
-                <div class="flex items-end gap-3">
-                    <div class="w-8 h-8 rounded-full bg-white/20 shrink-0"></div>
-                    <div class="bg-white/20 backdrop-blur text-white text-sm px-4 py-2.5 rounded-2xl rounded-bl-none max-w-xs">
-                        Hey! Just joined ChatApp 👋
-                    </div>
-                </div>
-                <div class="flex items-end justify-end gap-3">
-                    <div class="bg-white text-indigo-600 text-sm px-4 py-2.5 rounded-2xl rounded-br-none max-w-xs font-medium">
-                        Welcome! You'll love it here 🎉
-                    </div>
-                    <div class="w-8 h-8 rounded-full bg-white/20 shrink-0"></div>
-                </div>
-                <div class="flex items-end gap-3">
-                    <div class="w-8 h-8 rounded-full bg-white/20 shrink-0"></div>
-                    <div class="bg-white/20 backdrop-blur text-white text-sm px-4 py-2.5 rounded-2xl rounded-bl-none max-w-xs">
-                        Messages are so fast ⚡
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <p class="text-indigo-200 text-xs">&copy; {{ date('Y') }} ChatApp. All rights reserved.</p>
-    </div>
-
-    {{-- Right Panel: Form --}}
-    <div class="flex-1 flex flex-col justify-center items-center px-6 py-12">
-        <div class="w-full max-w-md">
-
-            {{-- Mobile Logo --}}
-            <div class="flex lg:hidden items-center gap-2 mb-8">
-                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+        {{-- Card Top Banner --}}
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-6 text-white">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                     </svg>
                 </div>
-                <span class="text-xl font-bold text-gray-900">ChatApp</span>
+                <span class="text-lg font-bold">ChatApp</span>
             </div>
+            <h1 class="text-2xl font-extrabold">Create your account</h1>
+            <p class="text-indigo-100 text-sm mt-1">Join thousands of users chatting instantly.</p>
+        </div>
 
-            <h1 class="text-2xl font-extrabold text-gray-900">Create your account</h1>
-            <p class="mt-1 text-sm text-gray-500">Already have an account? <a href="{{ route('login') }}" class="text-indigo-600 font-medium hover:underline">Sign in</a></p>
+        {{-- Card Body --}}
+        <div class="px-8 py-6">
 
-            <form method="POST" action="{{ route('register') }}" class="mt-8 space-y-5">
+            <form method="POST" action="{{ route('register') }}" class="space-y-4">
                 @csrf
 
                 {{-- Name --}}
                 <div>
                     <label for="name" class="block text-xs font-semibold text-gray-700 mb-1.5">Full Name</label>
-                    <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        value="{{ old('name') }}"
-                        required
-                        placeholder="John Doe"
-                        class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition @error('name') border-red-400 @enderror"
-                    />
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </span>
+                        <input
+                            id="name" name="name" type="text"
+                            value="{{ old('name') }}" required
+                            placeholder="John Doe"
+                            class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition @error('name') border-red-400 @enderror"
+                        />
+                    </div>
                     @error('name')
                         <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
                     @enderror
@@ -91,15 +59,19 @@
                 {{-- Email --}}
                 <div>
                     <label for="email" class="block text-xs font-semibold text-gray-700 mb-1.5">Email Address</label>
-                    <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value="{{ old('email') }}"
-                        required
-                        placeholder="you@example.com"
-                        class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition @error('email') border-red-400 @enderror"
-                    />
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </span>
+                        <input
+                            id="email" name="email" type="email"
+                            value="{{ old('email') }}" required
+                            placeholder="you@example.com"
+                            class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition @error('email') border-red-400 @enderror"
+                        />
+                    </div>
                     @error('email')
                         <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
                     @enderror
@@ -109,16 +81,18 @@
                 <div>
                     <label for="password" class="block text-xs font-semibold text-gray-700 mb-1.5">Password</label>
                     <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </span>
                         <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            required
+                            id="password" name="password" type="password" required
                             placeholder="Min. 8 characters"
-                            class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition pr-11 @error('password') border-red-400 @enderror"
+                            class="w-full pl-9 pr-11 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition @error('password') border-red-400 @enderror"
                         />
                         <button type="button" onclick="togglePassword('password', 'eye1')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <svg id="eye1" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg id="eye1" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                             </svg>
@@ -133,16 +107,18 @@
                 <div>
                     <label for="password_confirmation" class="block text-xs font-semibold text-gray-700 mb-1.5">Confirm Password</label>
                     <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </span>
                         <input
-                            id="password_confirmation"
-                            name="password_confirmation"
-                            type="password"
-                            required
+                            id="password_confirmation" name="password_confirmation" type="password" required
                             placeholder="Repeat your password"
-                            class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition pr-11"
+                            class="w-full pl-9 pr-11 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"
                         />
                         <button type="button" onclick="togglePassword('password_confirmation', 'eye2')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <svg id="eye2" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg id="eye2" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                             </svg>
@@ -162,17 +138,17 @@
                 </div>
 
                 {{-- Submit --}}
-                <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition shadow-sm hover:shadow-md">
+                <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition shadow-md hover:shadow-lg">
                     Create Account
                 </button>
 
             </form>
 
             {{-- Divider --}}
-            <div class="flex items-center gap-3 my-6">
-                <div class="flex-1 h-px bg-gray-200"></div>
+            <div class="flex items-center gap-3 my-4">
+                <div class="flex-1 h-px bg-gray-100"></div>
                 <span class="text-xs text-gray-400">or continue with</span>
-                <div class="flex-1 h-px bg-gray-200"></div>
+                <div class="flex-1 h-px bg-gray-100"></div>
             </div>
 
             {{-- Social Buttons --}}
@@ -193,6 +169,12 @@
                     GitHub
                 </button>
             </div>
+
+            {{-- Sign in link --}}
+            <p class="text-center text-xs text-gray-500 mt-5">
+                Already have an account?
+                <a href="{{ route('login') }}" class="text-indigo-600 font-semibold hover:underline">Sign in</a>
+            </p>
 
         </div>
     </div>
