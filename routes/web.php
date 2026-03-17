@@ -12,12 +12,10 @@ Route::get('/', function () {
     return view('livewire.home.homepage');
 })->name('home');
 
-// Show login page
 Route::get('/login', function () {
     return view('livewire.auth.login');
 })->middleware('guest')->name('login');
 
-// Handle login
 Route::post('/login', function (Request $request) {
     $credentials = $request->validate([
         'email'    => ['required', 'email'],
@@ -34,12 +32,10 @@ Route::post('/login', function (Request $request) {
     ])->onlyInput('email');
 })->middleware('guest');
 
-// Show register page
 Route::get('/register', function () {
     return view('livewire.auth.register');
 })->middleware('guest')->name('register');
 
-// Handle register
 Route::post('/register', function (Request $request) {
     $request->validate([
         'name'     => ['required', 'string', 'max:255'],
@@ -59,14 +55,35 @@ Route::post('/register', function (Request $request) {
     return redirect('/dashboard');
 })->middleware('guest');
 
+// Logout
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');
+
+// ===== STATIC - NO AUTH REQUIRED =====
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return view('livewire.dashboard.index');
+})->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+Route::get('/messages', function () {
+    return view('livewire.messages.index');
+})->name('messages');
 
-require __DIR__.'/auth.php';
+Route::get('/contacts', function () {
+    return view('livewire.contacts.index');
+})->name('contacts');
+
+Route::get('/notifications', function () {
+    return view('livewire.notifications.index');
+})->name('notifications');
+
+Route::get('/settings', function () {
+    return view('livewire.settings.index');
+})->name('settings');
+
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
