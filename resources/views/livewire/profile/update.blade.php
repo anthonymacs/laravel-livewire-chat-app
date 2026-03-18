@@ -67,7 +67,7 @@
                     <p class="text-xs text-gray-400 mt-0.5">Update your name, email, phone and more</p>
                 </div>
 
-                {{-- wire:submit instead of action= --}}
+                {{-- wire:submit replaces action= and method= --}}
                 <form wire:submit="savePersonal" class="space-y-5">
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -190,6 +190,7 @@
                     <p class="text-xs text-gray-400 mt-0.5">Choose a strong new password</p>
                 </div>
 
+                {{-- wire:submit replaces action= and method= --}}
                 <form wire:submit="savePassword" class="space-y-5 max-w-lg">
 
                     <div>

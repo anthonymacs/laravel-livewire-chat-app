@@ -1,9 +1,4 @@
-{{-- Static session toast (for regular redirects) --}}
-@if (session('success') || session('error'))
-<div id="toast" ...> {{-- your existing toast code --}} </div>
-@endif
-
-{{-- Livewire event toast --}}
+{{-- Livewire Toast --}}
 <div id="livewire-toast"
      class="fixed top-6 right-6 z-50 flex items-center gap-3 bg-white text-gray-800 text-sm font-medium px-5 py-4 rounded-2xl shadow-xl border border-gray-100"
      style="min-width:300px; opacity:0; transform:translateX(100%); transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);">
@@ -28,11 +23,11 @@
 
     document.addEventListener('livewire:init', () => {
         Livewire.on('toast', ({ type, message }) => {
-            const toast     = document.getElementById('livewire-toast');
-            const icon      = document.getElementById('livewire-toast-icon');
-            const title     = document.getElementById('livewire-toast-title');
-            const msg       = document.getElementById('livewire-toast-message');
-            const progress  = document.getElementById('livewire-toast-progress');
+            const toast    = document.getElementById('livewire-toast');
+            const icon     = document.getElementById('livewire-toast-icon');
+            const title    = document.getElementById('livewire-toast-title');
+            const msg      = document.getElementById('livewire-toast-message');
+            const progress = document.getElementById('livewire-toast-progress');
 
             const isSuccess = type === 'success';
 
