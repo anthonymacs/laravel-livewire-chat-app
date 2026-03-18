@@ -82,7 +82,8 @@
                     <p class="text-xs text-gray-400 mt-0.5">Update your name, email, phone and more</p>
                 </div>
 
-                <form action="{{ route('profile.update') }}" method="POST" class="space-y-5">
+                {{-- ↓ ONLY CHANGE: route('profile.update') → route('profile.save') --}}
+                <form action="{{ route('profile.save') }}" method="POST" class="space-y-5">
                     @csrf
                     @method('PATCH')
 
@@ -382,7 +383,6 @@
                         </button>
                     </div>
 
-                    {{-- Preview --}}
                     <div id="photo-preview-wrap" class="hidden flex items-center gap-4 p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
                         <img id="photo-preview" src="" class="w-16 h-16 rounded-2xl object-cover border-2 border-indigo-200 shadow" alt="Preview"/>
                         <div>
@@ -463,7 +463,6 @@
             reader.readAsDataURL(file);
         }
 
-        // Re-open correct tab if validation errors exist
         @if ($errors->has('current_password') || $errors->has('new_password'))
             showTab('password');
         @endif
