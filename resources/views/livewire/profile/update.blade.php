@@ -20,11 +20,6 @@
                         <div class="relative shrink-0">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=4f46e5&color=fff&size=200"
                                  class="w-16 h-16 rounded-2xl border-4 border-white shadow-lg" alt="Avatar">
-                            <button class="absolute -bottom-1.5 -right-1.5 w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center border-2 border-white hover:bg-indigo-700 transition shadow-md">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                                </svg>
-                            </button>
                         </div>
                         <div class="mb-1">
                             <h2 class="text-lg font-extrabold text-gray-900">{{ auth()->user()->name }}</h2>
@@ -47,16 +42,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- Flash Success Message --}}
-        @if (session('success'))
-            <div class="flex items-center gap-3 bg-green-50 border border-green-200 text-green-700 text-sm font-medium px-5 py-4 rounded-2xl">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                {{ session('success') }}
-            </div>
-        @endif
 
         {{-- Tabs --}}
         <div class="flex gap-2 bg-white/70 backdrop-blur-md rounded-2xl border border-white shadow-sm p-2">
@@ -82,12 +67,9 @@
                     <p class="text-xs text-gray-400 mt-0.5">Update your name, email, phone and more</p>
                 </div>
 
-                {{-- ↓ ONLY CHANGE: route('profile.update') → route('profile.save') --}}
-                <form action="{{ route('profile.save') }}" method="POST" class="space-y-5">
-                    @csrf
-                    @method('PATCH')
+                {{-- wire:submit instead of action= --}}
+                <form wire:submit="savePersonal" class="space-y-5">
 
-                    {{-- Name + Username --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-2">Full Name</label>
@@ -97,8 +79,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
                                 </span>
-                                <input type="text" name="name"
-                                       value="{{ old('name', auth()->user()->name) }}"
+                                <input type="text" wire:model="name"
                                        placeholder="Your full name"
                                        class="w-full pl-10 pr-4 py-3 rounded-xl border @error('name') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                             </div>
@@ -110,8 +91,7 @@
                             <label class="block text-xs font-semibold text-gray-600 mb-2">Username</label>
                             <div class="relative">
                                 <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 text-sm font-bold">@</span>
-                                <input type="text" name="username"
-                                       value="{{ old('username', auth()->user()->username) }}"
+                                <input type="text" wire:model="username"
                                        placeholder="username"
                                        class="w-full pl-8 pr-4 py-3 rounded-xl border @error('username') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                             </div>
@@ -121,7 +101,6 @@
                         </div>
                     </div>
 
-                    {{-- Email --}}
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-2">Email Address</label>
                         <div class="relative">
@@ -130,8 +109,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                 </svg>
                             </span>
-                            <input type="email" name="email"
-                                   value="{{ old('email', auth()->user()->email) }}"
+                            <input type="email" wire:model="email"
                                    placeholder="you@example.com"
                                    class="w-full pl-10 pr-4 py-3 rounded-xl border @error('email') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                         </div>
@@ -140,7 +118,6 @@
                         @enderror
                     </div>
 
-                    {{-- Phone + Location --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-2">Phone Number</label>
@@ -150,8 +127,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                     </svg>
                                 </span>
-                                <input type="text" name="phone"
-                                       value="{{ old('phone', auth()->user()->phone) }}"
+                                <input type="text" wire:model="phone"
                                        placeholder="+1 (555) 000-0000"
                                        class="w-full pl-10 pr-4 py-3 rounded-xl border @error('phone') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                             </div>
@@ -168,8 +144,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     </svg>
                                 </span>
-                                <input type="text" name="location"
-                                       value="{{ old('location', auth()->user()->location) }}"
+                                <input type="text" wire:model="location"
                                        placeholder="Your location"
                                        class="w-full pl-10 pr-4 py-3 rounded-xl border @error('location') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                             </div>
@@ -179,18 +154,16 @@
                         </div>
                     </div>
 
-                    {{-- Bio --}}
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-2">Bio</label>
-                        <textarea name="bio" rows="4" placeholder="Write a short bio..."
-                                  class="w-full px-4 py-3 rounded-xl border @error('bio') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition resize-none">{{ old('bio', auth()->user()->bio) }}</textarea>
+                        <textarea wire:model="bio" rows="4" placeholder="Write a short bio..."
+                                  class="w-full px-4 py-3 rounded-xl border @error('bio') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition resize-none"></textarea>
                         <p class="text-xs text-gray-400 mt-1.5">Max 160 characters</p>
                         @error('bio')
                             <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    {{-- Submit --}}
                     <div class="flex items-center justify-end gap-3 pt-2">
                         <a href="{{ route('profile.index') }}"
                            class="text-sm font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 px-5 py-2.5 rounded-xl transition">
@@ -217,9 +190,7 @@
                     <p class="text-xs text-gray-400 mt-0.5">Choose a strong new password</p>
                 </div>
 
-                <form action="{{ route('profile.password') }}" method="POST" class="space-y-5 max-w-lg">
-                    @csrf
-                    @method('PATCH')
+                <form wire:submit="savePassword" class="space-y-5 max-w-lg">
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-2">Current Password</label>
@@ -229,7 +200,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
                             </span>
-                            <input id="cur-pwd" type="password" name="current_password"
+                            <input id="cur-pwd" type="password" wire:model="current_password"
                                    placeholder="Enter current password"
                                    class="w-full pl-10 pr-11 py-3 rounded-xl border @error('current_password') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                             <button type="button" onclick="toggleField('cur-pwd')"
@@ -253,7 +224,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
                             </span>
-                            <input id="new-pwd" type="password" name="new_password"
+                            <input id="new-pwd" type="password" wire:model="new_password"
                                    placeholder="Min. 8 characters"
                                    class="w-full pl-10 pr-11 py-3 rounded-xl border @error('new_password') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"
                                    oninput="checkStrength(this.value)"/>
@@ -285,7 +256,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
                             </span>
-                            <input id="con-pwd" type="password" name="new_password_confirmation"
+                            <input id="con-pwd" type="password" wire:model="new_password_confirmation"
                                    placeholder="Repeat new password"
                                    class="w-full pl-10 pr-11 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                             <button type="button" onclick="toggleField('con-pwd')"
@@ -351,59 +322,12 @@
                     <h3 class="text-base font-bold text-gray-900">Profile Photo</h3>
                     <p class="text-xs text-gray-400 mt-0.5">Upload a new profile picture</p>
                 </div>
-
-                <div class="space-y-6">
-
-                    <div class="flex items-center gap-6 p-6 bg-gray-50 rounded-2xl">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=4f46e5&color=fff&size=200"
-                             class="w-24 h-24 rounded-2xl border-2 border-indigo-100 shadow-md" alt="Avatar">
-                        <div>
-                            <p class="text-sm font-bold text-gray-800">Current Photo</p>
-                            <p class="text-xs text-gray-400 mt-1">This is your current profile photo visible to other users.</p>
-                            <button class="mt-3 text-xs font-semibold text-red-500 bg-red-50 hover:bg-red-100 border border-red-100 px-3 py-1.5 rounded-lg transition">
-                                Remove Photo
-                            </button>
-                        </div>
-                    </div>
-
-                    <div onclick="document.getElementById('photo-input').click()"
-                         class="border-2 border-dashed border-indigo-200 rounded-2xl p-10 text-center hover:border-indigo-400 hover:bg-indigo-50/30 transition cursor-pointer">
-                        <div class="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        <p class="text-sm font-semibold text-gray-700">Drag and drop your photo here</p>
-                        <p class="text-xs text-gray-400 mt-1">or click to browse files</p>
-                        <p class="text-xs text-gray-300 mt-3">PNG, JPG, GIF up to 5MB</p>
-                        <input id="photo-input" type="file" class="hidden" accept="image/*"
-                               onchange="previewPhoto(event)"/>
-                        <button type="button" class="mt-4 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-4 py-2 rounded-xl transition border border-indigo-100">
-                            Choose File
-                        </button>
-                    </div>
-
-                    <div id="photo-preview-wrap" class="hidden flex items-center gap-4 p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
-                        <img id="photo-preview" src="" class="w-16 h-16 rounded-2xl object-cover border-2 border-indigo-200 shadow" alt="Preview"/>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-800">New photo selected</p>
-                            <p id="photo-name" class="text-xs text-gray-400 mt-0.5"></p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-end gap-3">
-                        <a href="{{ route('profile.index') }}"
-                           class="text-sm font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 px-5 py-2.5 rounded-xl transition">
-                            Cancel
-                        </a>
-                        <button type="submit"
-                                class="flex items-center gap-2 text-sm font-semibold text-white px-6 py-2.5 rounded-xl transition shadow-md hover:shadow-lg hover:opacity-90"
-                                style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            Upload Photo
-                        </button>
+                <div class="flex items-center gap-6 p-6 bg-gray-50 rounded-2xl">
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=4f46e5&color=fff&size=200"
+                         class="w-24 h-24 rounded-2xl border-2 border-indigo-100 shadow-md" alt="Avatar">
+                    <div>
+                        <p class="text-sm font-bold text-gray-800">Coming Soon</p>
+                        <p class="text-xs text-gray-400 mt-1">Photo upload will be available shortly.</p>
                     </div>
                 </div>
             </div>
@@ -450,22 +374,6 @@
             text.textContent = score > 0 ? labels[score - 1] : 'Enter a password';
             text.className = 'text-xs mt-1 ' + (score > 0 ? textColors[score - 1] : 'text-gray-400');
         }
-
-        function previewPhoto(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = e => {
-                document.getElementById('photo-preview').src = e.target.result;
-                document.getElementById('photo-name').textContent = file.name;
-                document.getElementById('photo-preview-wrap').classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        @if ($errors->has('current_password') || $errors->has('new_password'))
-            showTab('password');
-        @endif
     </script>
 
 @endsection
