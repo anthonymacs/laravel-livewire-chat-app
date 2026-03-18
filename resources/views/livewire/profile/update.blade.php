@@ -1,10 +1,4 @@
-@extends('layouts.app')
-
-@section('title', 'Update Profile')
-@section('page-title', 'Update Profile')
-@section('page-subtitle', 'Edit your personal information')
-
-@section('content')
+<div>
 
     <div class="max-w-4xl mx-auto space-y-6">
 
@@ -67,9 +61,7 @@
                     <p class="text-xs text-gray-400 mt-0.5">Update your name, email, phone and more</p>
                 </div>
 
-                {{-- wire:submit replaces action= and method= --}}
                 <form wire:submit="savePersonal" class="space-y-5">
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-2">Full Name</label>
@@ -79,25 +71,19 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
                                 </span>
-                                <input type="text" wire:model="name"
-                                       placeholder="Your full name"
+                                <input type="text" wire:model="name" placeholder="Your full name"
                                        class="w-full pl-10 pr-4 py-3 rounded-xl border @error('name') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                             </div>
-                            @error('name')
-                                <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
-                            @enderror
+                            @error('name') <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-2">Username</label>
                             <div class="relative">
                                 <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 text-sm font-bold">@</span>
-                                <input type="text" wire:model="username"
-                                       placeholder="username"
+                                <input type="text" wire:model="username" placeholder="username"
                                        class="w-full pl-8 pr-4 py-3 rounded-xl border @error('username') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                             </div>
-                            @error('username')
-                                <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
-                            @enderror
+                            @error('username') <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
@@ -109,13 +95,10 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                 </svg>
                             </span>
-                            <input type="email" wire:model="email"
-                                   placeholder="you@example.com"
+                            <input type="email" wire:model="email" placeholder="you@example.com"
                                    class="w-full pl-10 pr-4 py-3 rounded-xl border @error('email') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                         </div>
-                        @error('email')
-                            <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
-                        @enderror
+                        @error('email') <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -127,13 +110,10 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                     </svg>
                                 </span>
-                                <input type="text" wire:model="phone"
-                                       placeholder="+1 (555) 000-0000"
+                                <input type="text" wire:model="phone" placeholder="+1 (555) 000-0000"
                                        class="w-full pl-10 pr-4 py-3 rounded-xl border @error('phone') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                             </div>
-                            @error('phone')
-                                <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
-                            @enderror
+                            @error('phone') <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-2">Location</label>
@@ -144,13 +124,10 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     </svg>
                                 </span>
-                                <input type="text" wire:model="location"
-                                       placeholder="Your location"
+                                <input type="text" wire:model="location" placeholder="Your location"
                                        class="w-full pl-10 pr-4 py-3 rounded-xl border @error('location') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"/>
                             </div>
-                            @error('location')
-                                <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
-                            @enderror
+                            @error('location') <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
@@ -159,9 +136,7 @@
                         <textarea wire:model="bio" rows="4" placeholder="Write a short bio..."
                                   class="w-full px-4 py-3 rounded-xl border @error('bio') border-red-400 bg-red-50 @else border-gray-200 @enderror text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition resize-none"></textarea>
                         <p class="text-xs text-gray-400 mt-1.5">Max 160 characters</p>
-                        @error('bio')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                        @enderror
+                        @error('bio') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="flex items-center justify-end gap-3 pt-2">
@@ -190,9 +165,7 @@
                     <p class="text-xs text-gray-400 mt-0.5">Choose a strong new password</p>
                 </div>
 
-                {{-- wire:submit replaces action= and method= --}}
                 <form wire:submit="savePassword" class="space-y-5 max-w-lg">
-
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-2">Current Password</label>
                         <div class="relative">
@@ -212,9 +185,7 @@
                                 </svg>
                             </button>
                         </div>
-                        @error('current_password')
-                            <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
-                        @enderror
+                        @error('current_password') <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
@@ -244,9 +215,7 @@
                             <div id="s4" class="h-1.5 flex-1 rounded-full bg-gray-200 transition-all"></div>
                         </div>
                         <p id="strength-text" class="text-xs text-gray-400 mt-1">Enter a password</p>
-                        @error('new_password')
-                            <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
-                        @enderror
+                        @error('new_password') <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
@@ -377,4 +346,4 @@
         }
     </script>
 
-@endsection
+</div>

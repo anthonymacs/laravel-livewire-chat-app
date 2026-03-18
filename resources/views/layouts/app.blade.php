@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatApp — @yield('title', 'Dashboard')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 <body class="font-sans antialiased min-h-screen flex"
       style="background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 50%, #faf5ff 100%);">
@@ -19,10 +20,19 @@
         @include('partials.header')
 
         <main class="flex-1 p-6 overflow-y-auto">
-            @yield('content')
+            {{-- Livewire components use $slot, plain blade views use @yield --}}
+            @hasSection('content')
+                @yield('content')
+            @else
+                {{ $slot ?? '' }}
+            @endif
         </main>
 
     </div>
+
+    @include('partials.toast')
+
+    @livewireScripts
 
     <script>
         function toggleSidebar() {

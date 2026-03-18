@@ -12,52 +12,51 @@ Route::get('/', function () {
 })->name('home');
 
 // ===== GUEST ROUTES =====
-Route::get('/login', function () {
-    if (Auth::check()) return redirect('/dashboard');
-    return view('livewire.auth.login');
-})->name('login');
+Route::middleware('guest')->group(function () {
 
-Route::post('/login', function (Request $request) {
-    $credentials = $request->validate([
-        'email'    => ['required', 'email'],
-        'password' => ['required'],
-    ]);
+    Route::get('/login', function () {
+        return view('livewire.auth.login');
+    })->name('login');
 
-    if (Auth::attempt($credentials, $request->boolean('remember'))) {
-        $request->session()->regenerate();
-        return redirect()->intended('/dashboard');
-    }
+    Route::post('/login', function (Request $request) {
+        $credentials = $request->validate([
+            'email'    => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-    return back()->withErrors([
-        'email' => 'The provided credentials do not match our records.',
-    ])->onlyInput('email');
-});
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended('/dashboard');
+        }
 
-Route::get('/register', function () {
-    if (Auth::check()) return redirect('/dashboard');
-    return view('livewire.auth.register');
-})->name('register');
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
+    });
 
-Route::post('/register', function (Request $request) {
-    if (Auth::check()) return redirect('/dashboard');
+    Route::get('/register', function () {
+        return view('livewire.auth.register');
+    })->name('register');
 
-    $request->validate([
-        'name'     => ['required', 'string', 'max:255'],
-        'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        'terms'    => ['accepted'],
-    ]);
+    Route::post('/register', function (Request $request) {
+        $request->validate([
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'terms'    => ['accepted'],
+        ]);
 
-    $user = User::create([
-        'name'     => $request->name,
-        'email'    => $request->email,
-        'password' => Hash::make($request->password),
-        'role'     => 'user',
-    ]);
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+            'role'     => 'user',
+        ]);
 
-    Auth::login($user);
+        Auth::login($user);
+        return redirect('/dashboard');
+    });
 
-    return redirect('/dashboard');
 });
 
 // ===== LOGOUT =====
@@ -69,38 +68,30 @@ Route::post('/logout', function (Request $request) {
 })->name('logout');
 
 // ===== AUTH REQUIRED ROUTES =====
-Route::get('/dashboard', function () {
-    if (!Auth::check()) return redirect('/login');
-    return view('livewire.dashboard.index');
-})->name('dashboard');
+Route::middleware('auth')->group(function () {
 
-Route::get('/messages', function () {
-    if (!Auth::check()) return redirect('/login');
-    return view('livewire.messages.index');
-})->name('messages');
+    Route::get('/dashboard', function () {
+        return view('livewire.dashboard.index');
+    })->name('dashboard');
 
-Route::get('/contacts', function () {
-    if (!Auth::check()) return redirect('/login');
-    return view('livewire.contacts.index');
-})->name('contacts');
+    Route::get('/messages', function () {
+        return view('livewire.messages.index');
+    })->name('messages');
 
-Route::get('/notifications', function () {
-    if (!Auth::check()) return redirect('/login');
-    return view('livewire.notifications.index');
-})->name('notifications');
+    Route::get('/contacts', function () {
+        return view('livewire.contacts.index');
+    })->name('contacts');
 
-Route::get('/settings', function () {
-    if (!Auth::check()) return redirect('/login');
-    return view('livewire.settings.index');
-})->name('settings');
+    Route::get('/notifications', function () {
+        return view('livewire.notifications.index');
+    })->name('notifications');
 
-// ===== PROFILE ROUTES =====
-Route::get('/profile', function () {
-    if (!Auth::check()) return redirect('/login');
-    return view('livewire.profile.index');
-})->name('profile.index');
+    Route::get('/settings', function () {
+        return view('livewire.settings.index');
+    })->name('settings');
 
-Route::get('/profile/update', function () {
-    if (!Auth::check()) return redirect('/login');
-    return view('livewire.profile.update');
-})->name('profile.update');
+    // ===== PROFILE ROUTES =====
+    Route::get('/profile', \App\Livewire\Profile\Index::class)->name('profile.index');
+    Route::get('/profile/update', \App\Livewire\Profile\Update::class)->name('profile.update');
+
+});

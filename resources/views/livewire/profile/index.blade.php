@@ -1,10 +1,4 @@
-@extends('layouts.app')
-
-@section('title', 'Profile')
-@section('page-title', 'Profile')
-@section('page-subtitle', 'Manage your account information')
-
-@section('content')
+<div>
 
     {{-- Profile Header --}}
     <div class="bg-white/70 backdrop-blur-md rounded-3xl border border-white shadow-sm overflow-hidden mb-6">
@@ -42,8 +36,6 @@
                     <div class="mb-1">
                         <div class="flex items-center gap-2">
                             <h2 class="text-xl font-extrabold text-gray-900">{{ auth()->user()->name }}</h2>
-
-                            {{-- Role Badge --}}
                             @if(auth()->user()->isSuperAdmin())
                                 <span class="flex items-center gap-1 text-xs font-semibold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">
                                     <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-pulse"></span>
@@ -131,7 +123,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 mb-2">Full Name</label>
                         <div class="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5">
@@ -212,7 +203,6 @@
                             </span>
                         </div>
                     </div>
-
                 </div>
 
                 {{-- Bio --}}
@@ -229,4 +219,4 @@
         </div>
     </div>
 
-@endsection
+</div>
