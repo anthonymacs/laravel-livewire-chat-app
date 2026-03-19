@@ -53,12 +53,7 @@
                 <a href="{{ route('login') }}" class="text-indigo-600 font-medium hover:underline">Sign in</a>
             </p>
 
-            <form wire:submit="register" class="mt-8 space-y-5"
-                  x-data="{}"
-                  x-on:submit="
-                    $wire.password = document.getElementById('password_input').value;
-                    $wire.password_confirmation = document.getElementById('password_confirmation_input').value;
-                  ">
+            <form wire:submit="register" class="mt-8 space-y-5">
 
                 {{-- Name --}}
                 <div>
@@ -90,16 +85,17 @@
 
                 {{-- Password --}}
                 <div>
-                    <label for="password_input" class="block text-xs font-semibold text-gray-700 mb-1.5">Password</label>
+                    <label for="password" class="block text-xs font-semibold text-gray-700 mb-1.5">Password</label>
                     <div class="relative">
-                        <input id="password_input"
+                        <input id="password"
                             type="password"
+                            wire:model="password"
                             autocomplete="new-password"
                             required
                             placeholder="Create a password"
                             class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition pr-11 @error('password') border-red-400 @enderror"/>
                         <button type="button"
-                            onclick="const f=document.getElementById('password_input');f.type=f.type==='password'?'text':'password'"
+                            onclick="const f=document.getElementById('password');f.type=f.type==='password'?'text':'password'"
                             class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -114,16 +110,17 @@
 
                 {{-- Confirm Password --}}
                 <div>
-                    <label for="password_confirmation_input" class="block text-xs font-semibold text-gray-700 mb-1.5">Confirm Password</label>
+                    <label for="password_confirmation" class="block text-xs font-semibold text-gray-700 mb-1.5">Confirm Password</label>
                     <div class="relative">
-                        <input id="password_confirmation_input"
+                        <input id="password_confirmation"
                             type="password"
+                            wire:model="password_confirmation"
                             autocomplete="new-password"
                             required
                             placeholder="Repeat your password"
                             class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition pr-11"/>
                         <button type="button"
-                            onclick="const f=document.getElementById('password_confirmation_input');f.type=f.type==='password'?'text':'password'"
+                            onclick="const f=document.getElementById('password_confirmation');f.type=f.type==='password'?'text':'password'"
                             class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

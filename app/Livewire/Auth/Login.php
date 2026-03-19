@@ -27,13 +27,11 @@ class Login extends Component
             'password' => $this->password,
         ], $this->remember)) {
             session()->regenerate();
-            $this->dispatch('toast', type: 'success', message: 'Welcome back! Redirecting...');
             $this->redirect('/dashboard');
             return;
         }
 
         $this->addError('email', 'These credentials do not match our records.');
-        $this->dispatch('toast', type: 'error', message: 'These credentials do not match our records.');
         $this->reset('password');
     }
 

@@ -3,9 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 
 Route::get('/', function () {
     return view('livewire.home.homepage');
@@ -43,9 +40,10 @@ Route::middleware('auth')->group(function () {
         return view('livewire.notifications.index');
     })->name('notifications');
 
-    Route::get('/settings', function () {
-        return view('livewire.settings.index');
-    })->name('settings');
+    // ===== AUDIT TRAILS =====
+    Route::get('/audit-trails', function () {
+        return view('livewire.audit-trails.index');
+    })->name('audit-trails');
 
     // ===== PROFILE ROUTES =====
     Route::get('/profile', \App\Livewire\Profile\Index::class)->name('profile.index');

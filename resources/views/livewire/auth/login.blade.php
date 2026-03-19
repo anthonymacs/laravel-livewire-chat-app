@@ -19,11 +19,7 @@
         </div>
 
         <div class="px-8 py-6">
-            <form wire:submit="login" class="space-y-4"
-                  x-data="{}"
-                  x-on:submit="
-                    $wire.password = document.getElementById('password_input').value;
-                  ">
+            <form wire:submit="login" class="space-y-4">
 
                 {{-- Email --}}
                 <div>
@@ -49,7 +45,7 @@
                 {{-- Password --}}
                 <div>
                     <div class="flex justify-between items-center mb-1.5">
-                        <label for="password_input" class="block text-xs font-semibold text-gray-700">Password</label>
+                        <label for="password" class="block text-xs font-semibold text-gray-700">Password</label>
                         @if (Route::has('password.request'))
                             <a href="{{ route('password.request') }}" class="text-xs text-indigo-600 font-medium hover:underline">Forgot password?</a>
                         @endif
@@ -60,15 +56,15 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                             </svg>
                         </span>
-                        {{-- Real password input (not wire:model) --}}
-                        <input id="password_input"
+                        <input id="password"
                             type="password"
+                            wire:model="password"
                             autocomplete="current-password"
                             required
                             placeholder="Enter your password"
                             class="w-full pl-9 pr-11 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition @error('password') border-red-400 @enderror"/>
                         <button type="button"
-                            onclick="const f=document.getElementById('password_input');f.type=f.type==='password'?'text':'password'"
+                            onclick="const f=document.getElementById('password');f.type=f.type==='password'?'text':'password'"
                             class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

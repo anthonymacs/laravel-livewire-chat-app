@@ -38,7 +38,7 @@ class Register extends Component
 
         Auth::login($user);
         $this->dispatch('toast', type: 'success', message: 'Account created! Welcome to ChatApp.');
-        $this->redirect('/dashboard');
+        return redirect()->route('dashboard');
     }
 
     public function render()
