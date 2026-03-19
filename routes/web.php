@@ -11,52 +11,9 @@ Route::get('/', function () {
     return view('livewire.home.homepage');
 })->name('home');
 
-// ===== GUEST ROUTES =====
 Route::middleware('guest')->group(function () {
-
-    Route::get('/login', function () {
-        return view('livewire.auth.login');
-    })->name('login');
-
-    Route::post('/login', function (Request $request) {
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
-        }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
-    });
-
-    Route::get('/register', function () {
-        return view('livewire.auth.register');
-    })->name('register');
-
-    Route::post('/register', function (Request $request) {
-        $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'terms'    => ['accepted'],
-        ]);
-
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => 'user',
-        ]);
-
-        Auth::login($user);
-        return redirect('/dashboard');
-    });
-
+    Route::get('/login', \App\Livewire\Auth\Login::class)->name('login');
+    Route::get('/register', \App\Livewire\Auth\Register::class)->name('register');
 });
 
 // ===== LOGOUT =====

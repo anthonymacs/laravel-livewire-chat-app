@@ -1,5 +1,11 @@
 <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
 
+    {{-- Loading Bar --}}
+    <div wire:loading wire:target="login"
+         class="absolute top-0 left-0 w-full h-1 z-50">
+        <div class="h-1 bg-indigo-500 animate-pulse w-full"></div>
+    </div>
+
     {{-- Card Top Banner --}}
     <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-6 text-white">
         <div class="flex items-center gap-2 mb-3">
@@ -81,9 +87,18 @@
             </div>
 
             {{-- Submit --}}
-            <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition shadow-md hover:shadow-lg">
+            <button type="submit"
+                    wire:loading.attr="disabled"
+                    wire:target="login"
+                    class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed">
                 <span wire:loading.remove wire:target="login">Sign In</span>
-                <span wire:loading wire:target="login">Signing in...</span>
+                <span wire:loading wire:target="login" class="flex items-center justify-center gap-2">
+                    <svg class="animate-spin w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                    </svg>
+                    Signing in...
+                </span>
             </button>
 
         </form>

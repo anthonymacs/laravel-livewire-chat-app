@@ -95,9 +95,18 @@
         @enderror
 
         {{-- Submit --}}
-        <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition shadow-sm hover:shadow-md">
+        <button type="submit"
+                wire:loading.attr="disabled"
+                wire:target="register"
+                class="w-full bg-indigo-600 text-white py-3 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition shadow-sm hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed">
             <span wire:loading.remove wire:target="register">Create Account</span>
-            <span wire:loading wire:target="register">Creating account...</span>
+            <span wire:loading wire:target="register" class="flex items-center justify-center gap-2">
+                <svg class="animate-spin w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                Creating account...
+            </span>
         </button>
 
     </form>
